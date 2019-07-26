@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ms-jgw-ingress
+spec:
+  tls:
+  - hosts:
+    - baojunev.com
+    secretName: ingress-secret
+  rules:
+  - host: ms2.baojunev.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jgw
+          servicePort: 8082

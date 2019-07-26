@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cs
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: cs
+        version: "1.0"
+    spec:
+      imagePullSecrets:
+      - name: aliyregistrykey
+      containers:
+      - name: cs-app
+        image: registry.cn-shenzhen.aliyuncs.com/timedifier/cs:2
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod,swagger
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+        - name: JHIPSTER_REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+        - name: SPRING_SLEUTH_PROPAGATION_KEYS
+          value: "x-request-id,x-ot-span-context"
+        - name: SERVER_PORT
+          value: "8080"
+        - name: JAVA_OPTS
+          value: " -Xmx1024m -Xms1024m"
+        - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+          value: "true"
+        - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+          value: "172.22.14.95"
+        - name: JHIPSTER_LOGGING_LOGSTASH_PORT
+          value: "8098"
+        - name: APPLICATION_SMS_SENDURL
+          value: "http://172.22.14.72:8089/api/v2/common/sendSMSCode"
+        - name: APPLICATION_SMS_CHECKURL
+          value: "http://172.22.14.72:8089/api/v2/common/checkCode"
+        - name: APPLICATION_SMS_SENDPYURL
+          value: "http://172.22.1.65/index.php?g=user&m=register&a=sendMsg"
+        - name: APPLICATION_SMS_CHECKPYURL
+          value: "http://172.22.1.65/index.php?g=user&m=register&a=verifyMsg"
+        - name: SPRING_DATASOURCE_URL1
+          value: "jdbc:mysql://172.22.14.124:3306/duiba_integral?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true"
+        - name: SPRING_DATASOURCE_USERNAME1
+          value: HJW
+        - name: SPRING_DATASOURCE_PASSWORD1
+          value: mysql5050
+        - name: SPRING_DATASOURCE_URL2
+          value: "jdbc:mysql://172.22.14.15:3000/wl_mall_v2?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true"
+        - name: SPRING_DATASOURCE_USERNAME2
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD2
+          value: 5be65a8a8d752420163174df92ccdfcb
+        - name: SPRING_DATASOURCE_URL3
+          value: "jdbc:mysql://172.22.14.51:8097/jgw?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true"
+        - name: SPRING_DATASOURCE_USERNAME3
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD3
+          value: system
+        - name: APPLICATION_DUIBA_CHECKURL
+          value: "https://mysecret.baojunev.com/dbchk/index.html"
+        - name: APPLICATION_DUIBA_CHECK_INTERVAL
+          value: "5"
+        resources:
+          requests:
+            memory: "1024Mi"
+          limits:
+            memory: "1280Mi"
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /management/health
+            port: http
+          initialDelaySeconds: 120

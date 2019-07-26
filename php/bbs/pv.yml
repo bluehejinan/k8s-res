@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: bbs-php-www-pv
+    namespace: bbs
+spec:
+    capacity:
+      storage: 50Gi
+    accessModes:
+      - ReadWriteMany
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs
+    nfs:
+      path: /nfs/bbs-php-www
+      server: 172.22.14.76

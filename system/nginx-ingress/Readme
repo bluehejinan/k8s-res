@@ -1,0 +1,77 @@
+1.部署default-http-backend
+在kube-system命名空间中
+
+2.部署nginx-ingress-controller
+在kube-system命名空间中部署，并且要使用Service account:kubernetes-dashboard（dashboard使用的SA）
+
+3.创建一个含有证书的 secret：
+在default命名空间中（在使用它的ingress所在的命名空间）创建
+
+	1).指定命名空间：
+	kubectl create secret tls ingress-secret --namespace=kube-system --key /root/bak/cert/baojunev.com.key --cert /root/bak/cert/baojunev.com.crt
+	推荐使用这种方式，crt证书记得使用补全了中间证书的
+	
+	2).--cert使用pem：
+	kubectl create secret tls ingress-secret --key /root/bak/cert/baojunev.com.key --cert /root/bak/cert/baojunev.com.pem
+	key单独指定，pem的排版就没有要求
+	
+	3).--key和--cert都使用pem：
+	kubectl create secret tls ingress-secret --key /root/bak/cert/baojunev.com.pem --cert /root/bak/cert/baojunev.com.pem
+	这种情况下需要pem的排版格式为：
+	
+	-----BEGIN CERTIFICATE-----
+	证书
+	-----END CERTIFICATE-----
+	-----BEGIN CERTIFICATE-----
+	中间证书
+	-----END CERTIFICATE-----
+	
+	-----BEGIN RSA PRIVATE KEY-----
+	......
+	-----END RSA PRIVATE KEY-----
+	
+	
+	注意：
+	1).ingress在哪个namespace下就在哪个namespace创建
+	2).中间证书如果没有需要去补全
+	3).pem：实际就是把“KEY文件 + CRT文件”放置在一起
+	4).完整的证书格式应该是：
+	-----BEGIN CERTIFICATE----- 
+	YOUR CERT 
+	-----END CERTIFICATE----- 
+	-----BEGIN CERTIFICATE----- 
+	Intermediate CERT 
+	-----END CERTIFICATE----- 
+	-----BEGIN CERTIFICATE----- 
+	CA CERT 
+	-----END CERTIFICATE-----
+	一般证书生成时会提供两个 crt 文件，一个 key 文件。
+
+4.Ingress中使用证书 
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ms-jgw-ingress
+spec:
+  tls:
+  - hosts:
+    - baojunev.com
+    secretName: ingress-secret
+  rules:
+  - host: ms2.baojunev.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jgw
+          servicePort: 8082
+
+5.附加说明
+	1).验证证书是否正确完整
+	https://www.myssl.cn/tools/check-server-cert.html
+	https://myssl.com/
+	2).nginx-ingress-controller中的nginx使用的ssl证书的目录
+	容器中的：/etc/ingress-controller/ssl/
+	
+	
+	

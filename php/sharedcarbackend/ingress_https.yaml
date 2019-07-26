@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sharecarbackendphp-ingress
+  namespace: bbs
+spec:
+  tls:
+  - hosts:
+    - baojunev.com
+    secretName: ingress-secret
+  rules:
+  - host: inventory2.baojunev.com
+    http:
+      paths:
+      - path: /sharedCarBackend
+        backend:
+          serviceName: sharecarbackendphp
+          servicePort: 9010
+  - host: inventory.baojunev.com
+    http:
+      paths:
+      - path: /sharedCarBackend
+        backend:
+          serviceName: sharecarbackendphp
+          servicePort: 9010

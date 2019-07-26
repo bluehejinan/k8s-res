@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bbsphp
+  namespace: bbs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bbsphp
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: bbsphp
+        version: "1.0"
+    spec:
+      imagePullSecrets:
+      - name: aliyregistrykey
+      containers:
+      - name: bbsphp
+        image: registry.cn-shenzhen.aliyuncs.com/timedifier/bbsphp:3
+        resources:
+          requests:
+            memory: "512Mi"
+          limits:
+            memory: "512Mi"
+        volumeMounts:
+        - mountPath: /app/public/upload/
+          name: bbsphp-www-data
+          subPath: public/upload
+        - mountPath: /app/data/upload/
+          name: bbsphp-www-data
+          subPath: data/upload
+        - mountPath: /app/data/upload1/
+          name: bbsphp-www-data
+          subPath: data/upload1
+        - mountPath: /app/data/runtime/
+          name: bbsphp-www-data
+          subPath: data/runtime
+        - mountPath: /app/tmp/
+          name: bbsphp-www-data
+          subPath: tmp
+        ports:
+        - name: http
+          containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /info.php
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /info.php
+            port: http
+          initialDelaySeconds: 120
+      volumes:
+      - name: bbsphp-www-data
+        persistentVolumeClaim:
+          claimName: bbs-php-www-pvc

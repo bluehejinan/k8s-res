@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+  namespace: default
+#common configuration shared between all applications
+data:
+  application.yml: |-
+    configserver:
+      name:  JHipster Registry
+      status: Connected to the JHipster Registry running in Kubernetes
+    eureka:
+      client:
+        initial-instance-info-replication-interval-seconds: 15
+        instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
+        fetch-registry: true
+        register-with-eureka: true
+        eureka-service-url-poll-interval-seconds: 15
+      instance:
+        lease-renewal-interval-in-seconds: 10
+        registry-default-open-for-traffic-count: 0
+    jhipster:
+      security:
+        authentication:
+          jwt:
+            secret: RawHjhEmy4wN7eRF
+            token-validity-in-seconds: 86400
+            token-validity-in-seconds-for-remember-me: 5592000
+    coreapi:
+      api-base-uri: http://172.22.1.136:80
+      apis:
+        accountRegister:
+          uri: /sgmw-uc-api/accountRegister/v1/register
+          authKey: 6899F419F012FB71E053360116AC6936
+          authPwd: 6899F419F013FB71E053360116AC6936
+        smsRegister:
+          uri: /sgmw-uc-api/accountRegister/v1/smsRegister
+          authKey: 68DABAD7F7A2FBDBE053360116AC7C5B
+          authPwd: 68DABAD7F7A2FBDBE053360116AC7C5C
+        weChatRegister:
+          uri: /sgmw-uc-api/accountRegister/v1/weChatRegister
+          authKey: 69025764D02F6508E053360116ACBE49
+          authPwd: 69025764D0306508E053360116ACBE49
+        sinaWeiboRegister:
+          uri: /sgmw-uc-api/accountRegister/v1/sinaWeiboRegister
+          authKey: 69025764D0326508E053360116ACBE49
+          authPwd: 69025764D0336508E053360116ACBE49
+        qqRegister:
+          uri: /sgmw-uc-api/accountRegister/v1/qqRegister
+          authKey: 69025764D0356508E053360116ACBE49
+          authPwd: 69025764D0366508E053360116ACBE49
+        login:
+          uri: /sgmw-uc-api/accountLogin/v1/login
+          authKey: 053a7ca612c34e13ae029569d3cfd900
+          authPwd: 053a7ca612c34e13ae029569d3cfd901
+        smsLogin:
+          uri: /sgmw-uc-api/accountLogin/v1/smsLogin
+          authKey: 68DCCE4D66CD395EE053360116AC7098
+          authPwd: 68DCCE4D66CD395EE053360116AC7099
+        wechatLogin:
+          uri: /sgmw-uc-api/accountLogin/v1/wechatLogin
+          authKey: cd9af96adec34259826ff57d0ed0f0e3
+          authPwd: 7aa541968d3c431cab8d54a6faa58d1e
+        sinaWeiboLogin:
+          uri: /sgmw-uc-api/accountLogin/v1/sinaWeiboLogin
+          authKey: 7b531f6dfae7457f8380fafc2217b0ee
+          authPwd: e125bcc78b284060aae8e691828aaee9
+        qqLogin:
+          uri: /sgmw-uc-api/accountLogin/v1/qqLogin
+          authKey: f4a567a0a55b4f1ea36f476bdd53627c
+          authPwd: 55e437a7cad14eb3b4150ccbd9ae44ca
+        getUserInfos:
+          uri: /sgmw-uc-api/userInfo/v1/queryUserInfos
+          authKey: 694D9F7EF9968007E053360116AC0E20
+          authPwd: 694D9F7EF9998007E053360116AC0E20
+        getVehicleSaleInfos:
+          uri: /sgmw-ve-api/vehicle/v1/queryVehicleSaleInfos
+          authKey: 62b123b4e97e4f2baacdf293c2021620
+          authPwd: 62b123b4e97e4f2baacdf293c2021620
+        getVehicleStaticInfo:
+          uri: /sgmw-ve-api/vehicle/v1/queryVehicleStaticInfoByVin
+          authKey: 0775482b88e8428abc1c5483409953b9
+          authPwd: 6a345a72b2fa41efbcce29e2778b0dd2
+        getUserBindVehicles:
+          uri: /sgmw-uc-api/userInfo/v1/queryUserBindVehicles
+          authKey: 6963F419D9E2EF9FE053360116AC5773
+          authPwd: 6963F419D9E3EF9FE053360116AC5773
+        updateUserInfo:
+          uri: /sgmw-uc-api/userInfo/v1/updateUserInfo
+          authKey: 69CFC1D86AB394CCE053360116AC13CE
+          authPwd: 69CFC1D86AB494CCE053360116AC13CE
+        updateIcon:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateIcon
+          authKey: 69B11FFA1D9C4AC2E053360116ACE9AF
+          authPwd: 69B11FFA1D9D4AC2E053360116ACE9AF
+        updatePwd:
+          uri: /sgmw-uc-api/accountUpdate/v1/updatePwd
+          authKey: 69B11FFA1D9F4AC2E053360116ACE9AF
+          authPwd: 69B11FFA1DA04AC2E053360116ACE9AF
+        updateEmail:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateEmail
+          authKey: 69A29048AE45B637E053360116AC5E12
+          authPwd: 69A29048AE46B637E053360116AC5E12
+        updatePhoneNum:
+          uri: /sgmw-uc-api/accountUpdate/v1/updatePhoneNum
+          authKey: 69B618000F97D39FE053360116ACDD2C
+          authPwd: 69B618000F98D39FE053360116ACDD2C
+        updateUnionId:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateUnionId
+          authKey: 69B11FFA1DA24AC2E053360116ACE9AF
+          authPwd: 69B11FFA1DA34AC2E053360116ACE9AF
+        updateSerialNo:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateSerialNo
+          authKey: 69B618000F9AD39FE053360116ACDD2C
+          authPwd: 69B618000F9BD39FE053360116ACDD2C
+        updateQQ:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateQQ
+          authKey: 69B11FFA1DA54AC2E053360116ACE9AF
+          authPwd: 69B11FFA1DA64AC2E053360116ACE9AF
+        updateWeiboId:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateWeiboId
+          authKey: 69B11FFA1DA84AC2E053360116ACE9AF
+          authPwd: 69B11FFA1DA94AC2E053360116ACE9AF
+        updateState:
+          uri: /sgmw-uc-api/accountUpdate/v1/updateState
+          authKey: 69B618000F9DD39FE053360116ACDD2C
+          authPwd: 69B618000F9ED39FE053360116ACDD2C
+        changeVehicleBind:
+          uri: /sgmw-uc-api/vehicle/v1/changeVehicleBind
+          authKey: 6A7F79F649C98BA9E053360116AC0F8F
+          authPwd: 6A7F79F649CA8BA9E053360116AC0F8F
+        updateKprqByVin:
+          uri: /sgmw-uc-api/saleVehicle/v1/updateKprqByVin
+          authKey: 69A300756697C1B5E053360116ACFA26
+          authPwd: 69A300756698C1B5E053360116ACFA26
+        updateTcrqByVin:
+          uri: /sgmw-uc-api/saleVehicle/v1/updateTcrqByVin
+          authKey: 69A421A29642E390E053360116AC5139
+          authPwd: 69A421A29643E390E053360116AC5139
+        acountMerge:
+          uri: /sgmw-uc-api/accountUpdate/v1/acountMerge
+          authKey: 69A421A29642E390E053360116AC5139
+          authPwd: 69A421A29643E390E053360116AC5139
+        addUserVehicleBind:
+          uri: /sgmw-uc-api/userInfo/v1/addUserVehicleBind
+          authKey: C559F5331E7B4BDF91465330C6CD7312
+          authPwd: 16DB9AA1D46A4F7687681AE0EEC3EA95 
+  # app specific configuration
+  jhipster-registry.yml: |-
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-2.jhipster-registry.default.svc.cluster.local:8761/eureka/

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: questionmanagementphp
+  namespace: bbs
+  labels:
+    app: questionmanagementphp
+spec:
+  ports:
+  - port: 9010
+    targetPort: 80
+    name: http
+  clusterIP: None
+  selector:
+    app: questionmanagement

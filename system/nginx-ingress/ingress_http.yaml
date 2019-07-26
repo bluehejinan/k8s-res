@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ms-jgw-ingress
+  namespace: kube-system
+spec:
+  rules:
+  - host: ms2.baojunev.com
+    http:
+      paths:
+      - backend:
+          serviceName: jgw.default
+          servicePort: 8082
+

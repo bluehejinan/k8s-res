@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: bbsphp-ingress
+  namespace: bbs
+spec:
+  tls:
+  - hosts:
+    - baojunev.com
+    secretName: ingress-secret
+  rules:
+  - host: bbstest2.baojunev.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: bbsphp
+          servicePort: 9009

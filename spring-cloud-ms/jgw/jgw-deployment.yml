@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jgw
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jgw
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: jgw
+        version: "1.0"
+    spec:
+      imagePullSecrets:
+      - name: aliyregistrykey  
+      containers:
+      - name: jgw-app
+        image: registry.cn-shenzhen.aliyuncs.com/timedifier/jgw:7
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod,swagger
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+        - name: JHIPSTER_REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://172.22.14.90:8097/jgw2?useUnicode=true&characterEncoding=utf8&useSSL=false"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: eOOLCHFY5oQJZaAx
+        - name: HAZELCAST_INTERFACE
+          value: "192.168.*.*"
+        - name: SPRING_SLEUTH_PROPAGATION_KEYS
+          value: "x-request-id,x-ot-span-context"
+        - name: SERVER_PORT
+          value: "8082"
+        - name: JAVA_OPTS
+          value: " -Xmx1024m -Xms1024m"
+        resources:
+          requests:
+            memory: "1024Mi"
+          limits:
+            memory: "1280Mi"
+        ports:
+        - name: http
+          containerPort: 8082
+        - name: tcp
+          containerPort: 5701
+        readinessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 120
